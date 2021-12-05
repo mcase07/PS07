@@ -1,23 +1,26 @@
-Distribution of the Majors at Smith College
-================
+---
+title: "Distribution of the Majors at Smith College"
+output: github_document
+---
 
-## Smih Majors Data Set
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+```
 
-The data for these plots comes from the Smith Common Data Set provided
-by the College. The data used is from the years 2020-21. The first plot
-uses data about the divisions of majors[1] and the second plor uses data
-about the distribution of the top five majors[2].
+## Smith Majors Data Set
 
-This is an R Markdown format used for publishing markdown documents to
-GitHub. When you click the **Knit** button all R code chunks are run and
-a markdown file (.md) suitable for publishing to GitHub is generated.
+The data for these plots comes from the Smith Common Data Set provided by the College. The data used is from the years 2020-21. The first plot uses data about the divisions of majors^[via https://www.smith.edu/sites/default/files/media/Documents/Registrar/MAJORSatGraduation.pdf] and the second plor uses data about the distribution of the top five majors^[via https://www.smith.edu/sites/default/files/media/Smith_CDS_2020-2021_update%204-7-21.pdf].
+
+This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
 
 ## Creating a New Data Set and Wrangling
 
-Taking information from the Smith Common Data Set and turning it into
-two data sets:
+Taking information from the Smith Common Data Set and turning it into two data sets:
 
-``` r
+```{r majors, echo = TRUE}
+
 major <- c("Social Science", "Computer and information sciences", "Area, ethnic, and gender studies", 
            "Engineering", "Foreign languages, literatures, and linguistics", "English", 
            "Biological/life sciences", "Mathematics and statistics", "Physical sciences", 
@@ -35,11 +38,14 @@ smith_major.data <- data.frame(major, percentage) %>%
 
 # Creating a new data frame of major divisions
 smith_major_division.data <- data.frame(major_division, division_percentage)
+
 ```
+
 
 Wrangling the top five majors at Smith!
 
-``` r
+```{r, echo = TRUE}
+
 # taking the top 5 majors
 smith_major_top <- smith_major.data %>%
    top_n(n = 5, wt = percentage)
@@ -47,10 +53,9 @@ smith_major_top <- smith_major.data %>%
 
 ## Barplots Illustrating the Data
 
-Barplot of the distribution of students in the four divisions of majors
-at the time of graduation:
+Barplot of the distribution of students in the four divisions of majors at the time of graduation:
 
-``` r
+```{r division_plot}
 ggplot(data = smith_major_division.data, aes(fct_reorder(major_division,
                                                          division_percentage),
                                              division_percentage,
@@ -65,11 +70,9 @@ ggplot(data = smith_major_division.data, aes(fct_reorder(major_division,
   theme(axis.text.x = element_blank())
 ```
 
-![](README_files/figure-gfm/division_plot-1.png)<!-- -->
-
 Barplot of the distribution of students in the top five majors awarded:
 
-``` r
+```{r}
 ggplot(data = smith_major_top, aes(x = major, 
                                    y = percentage, 
                                    fill = major)) + 
@@ -82,10 +85,4 @@ ggplot(data = smith_major_top, aes(x = major,
   theme(axis.text.x = element_blank())
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-[1] via
-<https://www.smith.edu/sites/default/files/media/Documents/Registrar/MAJORSatGraduation.pdf>
-
-[2] via
-<https://www.smith.edu/sites/default/files/media/Smith_CDS_2020-2021_update%204-7-21.pdf>
